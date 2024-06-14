@@ -30,7 +30,7 @@ namespace Personajes{
             this.nombre = nombre;
             this.ataque = ataque;
             this.defensa = defensa;
-            this.Tipo = tipo;
+            this.tipo = tipo;
             Posicion = 0;
             
         }
@@ -42,6 +42,14 @@ namespace Personajes{
         public void bajandoStats(){
             Ataque = Ataque/2;
             Defensa = Defensa/2;
+            if (Ataque == 0)
+            {
+                Ataque = 1;
+            }
+        }
+
+        public void avanzarPosicion(){
+            posicion += 1;
         }
 
         public override string ToString()

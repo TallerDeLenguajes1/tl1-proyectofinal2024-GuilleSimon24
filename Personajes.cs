@@ -6,8 +6,9 @@ namespace Personajes{
         private string nombre;
         private int ataque;
         private int defensa;
+        private int posicion;
 
-        private int Posicion;
+        private TipoUnidad tipo;
 
         public enum TipoUnidad{
             comun,
@@ -21,9 +22,9 @@ namespace Personajes{
 
         public int Defensa{get => defensa; set => defensa = value;}
 
-        public TipoUnidad Tipo{get => Tipo; set => Tipo = value;}
+        public TipoUnidad Tipo{get => tipo; set => tipo = value;}
 
-        public int posicion{get => posicion; set => posicion = value;}
+        public int Posicion{get => posicion; set => posicion = value;}
         
         public Creador(string nombre, int ataque, int defensa, TipoUnidad tipo) { 
             this.nombre = nombre;
@@ -34,7 +35,9 @@ namespace Personajes{
             
         }
 
+        public Creador(){
 
+        }
 
         public void bajandoStats(){
             Ataque = Ataque/2;
@@ -47,21 +50,27 @@ namespace Personajes{
         }
         //Queda pendiente encontrar una relacion para cumplir con las ideas de combates sucesivos de una unidad
 
-        //Consultar si se puede
+        //Consultar si puedo hacer esto desde aca
+        //Metodo para crear unidad normal
         public Creador CrearUnidadNormal(){
-           Creador objeto = new Creador("Normal", 4, 6, TipoUnidad.Normal);
+           Creador objeto = new Creador("Normal", 4, 6, TipoUnidad.comun);
            return objeto;
         }
 
+        //Metodo para crear unidad Tanque
         public Creador CrearUnidadTanque(){
-            Creador objeto = new Creador("Tanque", 4, 10, TipoUnidad.Tanque);
+            Creador objeto = new Creador("Tanque", 4, 10, TipoUnidad.tanque);
             return objeto;
         }
 
+        //Metodo para crear unidad Daño
         public Creador CrearUnidadDaño(){
-            Creador objeto = new Creador("Daño", 6, 4, TipoUnidad.Daño);
+            Creador objeto = new Creador("Daño", 6, 4, TipoUnidad.daño);
             return objeto;
         }
+        //Hasta acá
+
+        //Recordar hacer un funcion para darle nombres aleatorios a las unidades
 
 
 

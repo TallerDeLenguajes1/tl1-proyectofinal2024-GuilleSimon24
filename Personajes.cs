@@ -78,6 +78,16 @@ namespace Personajes{
         }
         //Hasta acá
 
+
+        public List<Creador> CrearListaUnidades()
+        {
+            var unidades = new List<Creador>();
+            
+            return unidades;
+        }
+
+        
+
         //Recordar hacer un funcion para darle nombres aleatorios a las unidades
 
 

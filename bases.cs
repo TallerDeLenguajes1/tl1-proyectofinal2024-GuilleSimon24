@@ -1,18 +1,19 @@
 namespace Bases
-{   using Personajes;
+{   using Unidades;
+
+
     public class Base{
 
         private string nombre;
         private int salud;
         private int defensa;
         private int ataque;
-        private int oro;
-
+        
         public string Nombre { get => nombre; set => nombre = value; }
         public int Salud{get => salud; set => salud = value;}
         public int Defensa{get => defensa; set => defensa = value;}
         public int Ataque{get => ataque; set => ataque = value;}
-        public int Oro{get => oro; set => oro = value;}
+        
 
         public Base(){}
 
@@ -21,12 +22,12 @@ namespace Bases
             this.salud = salud;
             this.defensa = defensa;
             this.ataque = ataque;
-            this.oro = 20;
+        
         }
 
         public override string ToString()
         {
-            return $"Nombre: {Nombre}, Ataque: {Ataque}, Defensa: {Defensa}, Oro: {Oro}";
+            return $"Nombre: {Nombre}, Ataque: {Ataque}, Defensa: {Defensa}";
         }
 
         public Base CrearBase(){
@@ -38,15 +39,12 @@ namespace Bases
             return objeto;
         }
 
-        public void BaseAtacada(Creador unidad1, Base atacada){
+        public void BaseAtacada(Unidad unidad1, Base atacada){
             atacada.salud -= (unidad1.Ataque - defensa);
             unidad1.bajandoStats();
         }
 
-        public void SubirOro(Base base1){
-            base1.oro +=5;
-        }
-
+        
         
 
 

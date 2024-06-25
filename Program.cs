@@ -16,17 +16,17 @@ Console.WriteLine(unidad1.ToString());
 Console.WriteLine(unidad2.ToString());
 Console.WriteLine(unidad3.ToString());
 */
-using Personajes;
+using Unidades;
 using Bases;
 
-Creador unidad1 = new Creador();
+Unidad unidad1 = new Unidad();
 unidad1 = unidad1.CrearUnidadNormal();
 
 
-Creador unidad2 = new Creador();
+Unidad unidad2 = new Unidad();
 unidad2 = unidad2.CrearUnidadTanque();
 
-Creador unidad3 = new Creador();
+Unidad unidad3 = new Unidad();
 unidad3 = unidad3.CrearUnidadDaño();
 
 
@@ -40,7 +40,7 @@ mia = mia.CrearBase();
 enemiga = enemiga.CrearBaseEnemiga();
 
 
-List<Creador> lista = new List<Creador>();
+List<Unidad> lista = new List<Unidad>();
 
 lista.Add(unidad3);
 
@@ -49,14 +49,14 @@ lista.Add(unidad2);
 lista.Add(unidad1);
 
 //Para mostrar listas
-foreach (Creador unidad in lista)
+foreach (Unidad unidad in lista)
 {
     Console.WriteLine(unidad);
 }
 Console.WriteLine("");
 lista.RemoveAt(0);
 
-foreach (Creador unidad in lista)
+foreach (Unidad unidad in lista)
 {
     Console.WriteLine(unidad);
 }
@@ -64,7 +64,7 @@ Console.WriteLine("");
 
 lista.RemoveAt(0);
 
-foreach (Creador unidad in lista)
+foreach (Unidad unidad in lista)
 {
     Console.WriteLine(unidad);
 }

@@ -1,7 +1,0 @@
-namespace turnos
-{
-    class Turno
-    {
-        
-    }
-}

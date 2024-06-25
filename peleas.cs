@@ -1,8 +1,0 @@
-namespace Peleas
-{
-    class pelea
-    {
-        
-    }
-    
-}

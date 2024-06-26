@@ -1,5 +1,6 @@
-﻿
-
-//Las listas funcionan como FILA
+﻿using Gameplay;
 
 
+Juego inciar = new Juego();
+
+inciar.IniciarJuego();

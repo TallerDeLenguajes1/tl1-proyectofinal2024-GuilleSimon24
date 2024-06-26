@@ -1,7 +1,7 @@
 namespace Gameplay
 {
     using Unidades;
-    class Gameplay
+    class Juego
     {
         private List<Unidad> unidadesJugador;
         private List<Unidad> unidadesEnemigo;
@@ -9,7 +9,7 @@ namespace Gameplay
         private int oroEnemigo;
         private int turno;
 
-        public Gameplay()
+        public Juego()
         {
             unidadesJugador = new List<Unidad>();
             unidadesEnemigo = new List<Unidad>();
@@ -27,11 +27,18 @@ namespace Gameplay
             unidadesEnemigo = Unidad.CrearListaUnidades();
 
             // Mostrar unidades iniciales
+            
             Console.WriteLine("Unidades del Jugador:");
             MostrarListaUnidades(unidadesJugador);
 
             Console.WriteLine("Unidades del Enemigo:");
             MostrarListaUnidades(unidadesEnemigo);
+
+
+            Console.WriteLine("Crea tu primera unidad: ");
+            TurnoJugador();
+            Console.WriteLine("El enemigo crea su primera unidad: ");
+            TurnoEnemigo();
 
             // Comenzar el ciclo de turnos
             while (unidadesJugador.Count > 0 && unidadesEnemigo.Count > 0)
@@ -42,11 +49,11 @@ namespace Gameplay
             }
 
             // Mostrar resultado del juego
-            if (unidadesJugador.Count > 0)
+            if (unidadesEnemigo.Count == 0)
             {
                 Console.WriteLine("El jugador ha ganado!");
             }
-            else if (unidadesEnemigo.Count > 0)
+            else if (unidadesJugador.Count == 0)
             {
                 Console.WriteLine("El enemigo ha ganado!");
             }
@@ -58,6 +65,8 @@ namespace Gameplay
 
         public void Combatir()
         {
+            
+            
             while (unidadesJugador.Count > 0 && unidadesEnemigo.Count > 0)
             {
                 // Seleccionar unidades para combatir
@@ -121,11 +130,9 @@ namespace Gameplay
 
             Console.WriteLine($"Oro del Jugador: {oroJugador}");
             Console.WriteLine($"Oro del Enemigo: {oroEnemigo}");
-
-            // Turno del jugador
+            
             TurnoJugador();
 
-            // Turno del enemigo (automático)
             TurnoEnemigo();
 
             // Realizar combate
@@ -172,7 +179,7 @@ namespace Gameplay
                         CrearUnidadJugador(Unidad.CrearUnidadDaño());
                         break;
                     case 4:
-                        Console.WriteLine("Turno saltado.");
+                        Console.WriteLine("Turno salteado.");
                         break;
                 }
             }

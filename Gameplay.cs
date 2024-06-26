@@ -58,8 +58,10 @@ namespace Gameplay
 
             //Juego un turno "fantasma" para no tener que 
             Console.WriteLine("Crea tu primera unidad: ");
+            Console.WriteLine("");
             TurnoJugador();
             Console.WriteLine("El enemigo crea su primera unidad: ");
+            Console.WriteLine("");
             TurnoEnemigo();
 
             // Comenzar el ciclo de turnos
@@ -73,14 +75,17 @@ namespace Gameplay
             // Mostrar resultado del juego
             if (BaseJugador.Salud > 0)
             {
+                Console.WriteLine("--------------------");
                 Console.WriteLine("El jugador ha ganado!");
             }
             else if (BaseEnemiga.Salud > 0)
             {
+                Console.WriteLine("--------------------");
                 Console.WriteLine("El enemigo ha ganado!");
             }
             else
-            {
+            {   //Esto viene de una version anterior del programa, preguntar si es necesario
+                Console.WriteLine("--------------------");
                 Console.WriteLine("Ambos han sido derrotados, es un empate!");
             }
         }
@@ -108,23 +113,37 @@ namespace Gameplay
 
             while (!turnoValido)
             {
-                Console.WriteLine("Turno del Jugador:");
-                Console.WriteLine("1. Crear unidad normal (10 de oro)");
-                Console.WriteLine("2. Crear unidad tanque (15 de oro)");
-                Console.WriteLine("3. Crear unidad de daño (20 de oro)");
-                Console.WriteLine("4. Atacar la base enemiga");
-                Console.WriteLine("5. Saltar turno");
+
+                //Separo los menus, dependiendo si puede o no atacar la base enemiga
+                if (unidadesEnemigo.Count == 0)
+                {
+                    Console.WriteLine("--------------------");
+                    Console.WriteLine("Turno del Jugador:");
+                    Console.WriteLine("1. Crear unidad normal (10 de oro)");
+                    Console.WriteLine("2. Crear unidad tanque (15 de oro)");
+                    Console.WriteLine("3. Crear unidad de daño (20 de oro)");
+                    Console.WriteLine("4. Atacar la base enemiga");
+                    Console.WriteLine("5. Saltar turno");
+                    Console.WriteLine("--------------------");
+                }
+                else
+                {
+                    Console.WriteLine("--------------------");
+                    Console.WriteLine("Turno del Jugador:");
+                    Console.WriteLine("1. Crear unidad normal (10 de oro)");
+                    Console.WriteLine("2. Crear unidad tanque (15 de oro)");
+                    Console.WriteLine("3. Crear unidad de daño (20 de oro)");
+                    Console.WriteLine("4. NO puedes atacar la base enemiga mientras el enemigo tenga unidades en el campo de batalla");
+                    Console.WriteLine("5. Saltar turno");
+                    Console.WriteLine("--------------------");
+                }
+
 
                 string opCadena = Console.ReadLine();
                 int opcion;
                 bool anda = int.TryParse(opCadena, out opcion);
                 if (anda)
                 {
-
-                    if (true)
-                    {
-                        
-                    }
                     switch (opcion)
                     {
                         case 1:
@@ -145,7 +164,7 @@ namespace Gameplay
                                 AtacarBaseEnemiga();
                                 turnoValido = true;
                             }
-                            else
+                            else    //Por las dudas aún asi insista en atacar la base enemiga sin cumplir con las condiciones
                             {
                                 Console.WriteLine("No puedes atacar la base enemiga mientras haya unidades enemigas en el campo de batalla.");
                             }
@@ -162,6 +181,8 @@ namespace Gameplay
             }
         }
 
+
+        //Funcion para crear la unidad jugador y listarla en la lista de unidades del jugador
         private void CrearUnidadJugador(Unidad unidad)
         {
             if (oroJugador >= unidad.Costo)
@@ -175,8 +196,12 @@ namespace Gameplay
                 Console.WriteLine("Oro insuficiente para crear la unidad.");
             }
         }
+
+
+        //Turno aleatorio para el enemigo
         private void TurnoEnemigo()
         {
+            Console.WriteLine("");
             Console.WriteLine("Turno del Enemigo:");
             // Lógica simple para el enemigo, crea unidades aleatoriamente si tiene suficiente oro
             int opcion = new Random().Next(1, 4);
@@ -199,10 +224,12 @@ namespace Gameplay
             {
                 unidadesEnemigo.Add(unidadEnemiga);
                 oroEnemigo -= unidadEnemiga.Costo;
+                Console.WriteLine("--------------------");
                 Console.WriteLine($"El enemigo ha creado una unidad {unidadEnemiga.Nombre}.");
             }
             else
             {
+                Console.WriteLine("--------------------");
                 Console.WriteLine("El enemigo no tiene suficiente oro para crear una unidad. Turno salteado");
             }
 
@@ -221,15 +248,18 @@ namespace Gameplay
             {
                 Unidad unidadAtacante = unidadesJugador[0];
                 BaseEnemiga.BaseAtacada(unidadAtacante);
+                Console.WriteLine("--------------------");
                 Console.WriteLine($"{unidadAtacante.Nombre} ha atacado la base enemiga!");
                 if (unidadAtacante.Ataque <= 0 || unidadAtacante.Defensa <= 0)
                 {
                     unidadesJugador.RemoveAt(0);
+                    Console.WriteLine("--------------------");
                     Console.WriteLine($"{unidadAtacante.Nombre} ha sido destruido después del ataque!");
                 }
             }
             else
             {
+                Console.WriteLine("--------------------");
                 Console.WriteLine("No hay unidades disponibles para atacar.");
             }
         }
@@ -240,19 +270,24 @@ namespace Gameplay
             {
                 Unidad unidadAtacante = unidadesEnemigo[0];
                 BaseJugador.BaseAtacada(unidadAtacante);
+                Console.WriteLine("--------------------");
                 Console.WriteLine($"{unidadAtacante.Nombre} ha atacado tu base!!");
                 if (unidadAtacante.Ataque <= 0 || unidadAtacante.Defensa <= 0)
                 {
                     unidadesEnemigo.RemoveAt(0);
+                    Console.WriteLine("--------------------");
                     Console.WriteLine($"{unidadAtacante.Nombre} ha sido destruido despues del ataque!");
                 }
             }
             else
             {
+                Console.WriteLine("--------------------");
                 Console.WriteLine("El enemigo quiso atacar tu base pero no tenia unidades disponibles. Turno salteado");
             }
         }
 
+
+        //Combate entre las primeras unidades de la lista
         private void Combatir()
         {
             if (unidadesJugador.Count > 0 && unidadesEnemigo.Count > 0)
@@ -270,17 +305,24 @@ namespace Gameplay
                 // Verificar si alguna unidad ha sido derrotada
                 if (unidadJugador.Defensa <= 0)
                 {
+                    Console.WriteLine("--------------------");
                     Console.WriteLine($"{unidadJugador.Nombre} ha sido derrotado!");
+                    Console.WriteLine("--------------------");
                     unidadesJugador.RemoveAt(0);
                 }
 
                 if (unidadEnemigo.Defensa <= 0)
                 {
+                    Console.WriteLine("--------------------");
                     Console.WriteLine($"{unidadEnemigo.Nombre} ha sido derrotado!");
+                    Console.WriteLine("--------------------");
                     unidadesEnemigo.RemoveAt(0);
                 }
             }
         }
+
+
+        //Funcion para mostrar la lista de las unidades
 
         public void MostrarListaUnidades(List<Unidad> lista)
         {

@@ -65,7 +65,7 @@ namespace Gameplay
             TurnoEnemigo();
 
             // Comenzar el ciclo de turnos
-            while (unidadesJugador.Count > 0 && unidadesEnemigo.Count > 0)
+            while (BaseJugador.Salud > 0 || BaseEnemiga.Salud > 0)
             {
                 Console.WriteLine($"\n--- Turno {turno} ---");
                 JugarTurno();
@@ -204,7 +204,7 @@ namespace Gameplay
             Console.WriteLine("");
             Console.WriteLine("Turno del Enemigo:");
             // Lógica simple para el enemigo, crea unidades aleatoriamente si tiene suficiente oro
-            int opcion = new Random().Next(1, 4);
+            int opcion = new Random().Next(1, 5);
             Unidad unidadEnemiga = null;
 
             switch (opcion)
@@ -217,6 +217,9 @@ namespace Gameplay
                     break;
                 case 3:
                     unidadEnemiga = Unidad.CrearUnidadDaño();
+                    break;
+                case 4:
+                    Console.WriteLine("El enemigo ha salteado su turno");
                     break;
             }
 
@@ -250,6 +253,11 @@ namespace Gameplay
                 BaseEnemiga.BaseAtacada(unidadAtacante);
                 Console.WriteLine("--------------------");
                 Console.WriteLine($"{unidadAtacante.Nombre} ha atacado la base enemiga!");
+                if (BaseEnemiga.Salud <= 0)
+                {
+                    Console.WriteLine("");
+                    Console.WriteLine("La base del enemgio fue destruida!!");
+                }
                 if (unidadAtacante.Ataque <= 0 || unidadAtacante.Defensa <= 0)
                 {
                     unidadesJugador.RemoveAt(0);

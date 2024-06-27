@@ -71,21 +71,21 @@ namespace Unidades
         //Metodo para crear unidad normal
         public static Unidad CrearUnidadNormal()
         {
-            Unidad objeto = new Unidad("Normal", 4, 6, TipoUnidad.comun, 10);
+            Unidad objeto = new Unidad("Normal", 4, 3, TipoUnidad.comun, 10);
             return objeto;
         }
 
         //Metodo para crear unidad Tanque
         public static Unidad CrearUnidadTanque()
         {
-            Unidad objeto = new Unidad("Tanque", 4, 10, TipoUnidad.tanque, 20);
+            Unidad objeto = new Unidad("Tanque", 4, 9, TipoUnidad.tanque, 15);
             return objeto;
         }
 
         //Metodo para crear unidad Daño
         public static Unidad CrearUnidadDaño()
         {
-            Unidad objeto = new Unidad("Daño", 6, 4, TipoUnidad.daño, 15);
+            Unidad objeto = new Unidad("Daño", 8, 4, TipoUnidad.daño, 20);
             return objeto;
         }
         //Hasta acá

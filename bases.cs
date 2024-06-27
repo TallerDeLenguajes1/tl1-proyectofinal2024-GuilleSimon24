@@ -31,12 +31,12 @@ namespace Bases
 
         public static Base CrearBase()
         {
-            return new Base("Base propia", 100, 5, 5);
+            return new Base("Base propia", 50, 2, 5);      
         }
 
         public static Base CrearBaseEnemiga()
         {
-            return new Base("Base enemiga", 100, 5, 5);
+            return new Base("Base enemiga", 50, 2, 5);
         }
 
         public void BaseAtacada(Unidad unidadAtacante)

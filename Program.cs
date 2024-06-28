@@ -1,6 +1,5 @@
 ﻿using Gameplay;
 
 
-Juego inciar = new Juego();
-
-inciar.IniciarJuego();
+Juego iniciar = new Juego();
+await iniciar.IniciarJuego();

@@ -45,5 +45,59 @@ namespace Bases
             salud -= daño > 0 ? daño : 0;
             unidadAtacante.bajandoStats();
         }
+
+        public static void AtacarBaseJugador(List<Unidad> unidadesEnemigo, int oroEnemigo, Base BaseJugador)
+        {
+            if (unidadesEnemigo.Count > 0)
+            {
+                Unidad unidadAtacante = unidadesEnemigo[0];
+                BaseJugador.BaseAtacada(unidadAtacante);
+                Console.WriteLine("--------------------");
+                Console.WriteLine($"{unidadAtacante.Nombre} ha atacado tu base!!");
+                if (unidadAtacante.Ataque <= 0 || unidadAtacante.Defensa <= 0)
+                {
+                    unidadesEnemigo.RemoveAt(0);
+                    Console.WriteLine("--------------------");
+                    Console.WriteLine($"{unidadAtacante.Nombre} ha sido destruido despues del ataque!");
+                    Console.WriteLine("Has ganado 5 de oro adicional!");
+                    oroEnemigo += 5;
+                }
+            }
+            else
+            {
+                Console.WriteLine("--------------------");
+                Console.WriteLine("El enemigo quiso atacar tu base pero no tenia unidades disponibles. Turno salteado");
+            }
+        }
+
+        public static void AtacarBaseEnemiga(List<Unidad> unidadesJugador, int oroEnemigo, Base BaseEnemiga)
+        {
+            if (unidadesJugador.Count > 0)
+            {
+                Unidad unidadAtacante = unidadesJugador[0];
+                BaseEnemiga.BaseAtacada(unidadAtacante);
+                Console.WriteLine("--------------------");
+                Console.WriteLine($"{unidadAtacante.Nombre} (La unidad {unidadAtacante.Tipo} del jugador) ha atacado la base enemiga!");
+                if (BaseEnemiga.Salud <= 0)
+                {
+                    Console.WriteLine("");
+                    Console.WriteLine("La base del enemgio fue destruida!!");
+                }
+                if (unidadAtacante.Ataque <= 0 || unidadAtacante.Defensa <= 0)
+                {
+                    unidadesJugador.RemoveAt(0);
+                    Console.WriteLine("--------------------");
+                    Console.WriteLine($"{unidadAtacante.Nombre} ha sido destruido después del ataque!");
+                    Console.WriteLine("El enemigo gano 5 de oro adicional");
+                    oroEnemigo += 5;
+
+                }
+            }
+            else
+            {
+                Console.WriteLine("--------------------");
+                Console.WriteLine("No hay unidades disponibles para atacar.");
+            }
+        }
     }
 }

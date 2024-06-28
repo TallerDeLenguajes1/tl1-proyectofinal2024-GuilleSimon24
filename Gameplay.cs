@@ -2,6 +2,11 @@ namespace Gameplay
 {
     using Unidades;
     using Bases;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using Complemento;
+    using Pantalla;
+
     class Juego
     {
         private List<Unidad> unidadesJugador;
@@ -26,23 +31,25 @@ namespace Gameplay
             turno = 1;
         }
 
-        public void IniciarJuego()
+        public async Task IniciarJuego()
         {
             Console.WriteLine("--------------------");
             Console.WriteLine("Bienvenido al juego!");
             Console.WriteLine("--------------------");
 
-            // Crear unidades iniciales para el jugador y el enemigo
+            await Unidad.TraerNombreAPI();  //Cargo en la lista los nombres traidos de la API
+
+            // Crear listas de unidades para el jugador y el enemigo
             unidadesJugador = Unidad.CrearListaUnidades();
             unidadesEnemigo = Unidad.CrearListaUnidades();
 
             // Mostrar unidades iniciales (CONTROL, LUEGO COMENTAR)
 
             Console.WriteLine("Unidades del Jugador:");
-            MostrarListaUnidades(unidadesJugador);
+            Complemento.MostrarListaUnidades(unidadesJugador);
 
             Console.WriteLine("Unidades del Enemigo:");
-            MostrarListaUnidades(unidadesEnemigo);
+            Complemento.MostrarListaUnidades(unidadesEnemigo);
             Console.WriteLine("--------------------");
 
 
@@ -53,67 +60,38 @@ namespace Gameplay
                 JugarTurno();
                 turno++;
 
-                if (turno > 50)
+                if (turno > 50)     //Por si la pelea se extiende demasiado
                 {
-                    Console.WriteLine("--------------");
-                    Console.WriteLine("");
-                    Console.WriteLine("El combate se extendió demasiado");
-                    Console.WriteLine("");
-                    Console.WriteLine("El ganador se decidirá en base a las salud de sus bases");
-                    Console.WriteLine("");
-                    mostrarStats();
-                    if (BaseJugador.Salud > BaseEnemiga.Salud)
-                    {
-                        Console.WriteLine("--------------------");
-                        Console.WriteLine("El jugador ha ganado!");
-                    }
-                    else if (BaseEnemiga.Salud > BaseJugador.Salud)
-                    {
-                        Console.WriteLine("--------------------");
-                        Console.WriteLine("El enemigo ha ganado!");
-                    }
-                    else
-                    {   //Esto viene de una version anterior del programa, preguntar si es necesario
-                        Console.WriteLine("--------------------");
-                        Console.WriteLine("ES UN EMPATE!");
-                    }
+                    Complemento.PeleaLarga(BaseJugador, BaseEnemiga);
                     break;
                 }
             }
 
-
-
             // Mostrar resultado del juego
-            if (BaseJugador.Salud > 0)
-            {
-                Console.WriteLine("--------------------");
-                Console.WriteLine("El jugador ha ganado!");
-            }
-            else if (BaseEnemiga.Salud > 0)
-            {
-                Console.WriteLine("--------------------");
-                Console.WriteLine("El enemigo ha ganado!");
-            }
-            else
-            {   //Esto viene de una version anterior del programa, preguntar si es necesario
-                Console.WriteLine("--------------------");
-                Console.WriteLine("Ambos han sido derrotados, es un empate!");
-            }
+            Complemento.Resultado(BaseJugador, BaseEnemiga);
+
         }
 
         private void JugarTurno()
         {
 
             //Muestro base y oro de jugadores antes de pelear
-            mostrarStats();
+            Console.WriteLine("Base del jugador: ");
+            Complemento.mostrarStats(BaseJugador);
+            Console.WriteLine("Base del enemigo: ");
+            Complemento.mostrarStats(BaseEnemiga);
+
+
+            //Muestro todos los turnos el oro de ambos
+            //CONSULTAR SI SOLO MUESTRO EL MIO. LA IDEA ES QUE HAYA QUE CALCULAR SEGUN LO QUE HAGA EL OTRO
             Console.WriteLine($"Oro del Jugador: {oroJugador}");
             Console.WriteLine($"Oro del Enemigo: {oroEnemigo}");
 
             Console.WriteLine("");
-            Console.WriteLine("Unidadesd del jugador:");
-            MostrarListaUnidades(unidadesJugador);
+            Console.WriteLine("Unidades del jugador:");
+            Complemento.MostrarListaUnidades(unidadesJugador);
             Console.WriteLine("Unidades del enemigo: ");
-            MostrarListaUnidades(unidadesEnemigo);
+            Complemento.MostrarListaUnidades(unidadesEnemigo);
 
 
             TurnoJugador();
@@ -137,8 +115,6 @@ namespace Gameplay
             while (!turnoValido)
             {
 
-
-
                 Console.WriteLine("--------------------");
                 Console.WriteLine("Turno del Jugador:");
                 Console.WriteLine("1. Crear unidad normal (10 de oro)");
@@ -146,8 +122,6 @@ namespace Gameplay
                 Console.WriteLine("3. Crear unidad de daño (20 de oro)");
                 Console.WriteLine("4. Saltar turno");
                 Console.WriteLine("--------------------");
-
-
 
                 string opCadena = Console.ReadLine();
                 int opcion;
@@ -168,6 +142,11 @@ namespace Gameplay
                             CrearUnidadJugador(Unidad.CrearUnidadDaño());
                             turnoValido = true;
                             break;
+                        //SUJETO A REVISION DEL PROFE
+                        /*Este modulo de codigo era para que el jugador gaste un turno atacando a la base enemiga
+                        Mientras que el enemigo hacia un autoatack a la base propia
+                        Lo que desbalanceaba mucho el juego teniendo en cuenta que el enemigo podia hacer 2 jugadas
+                        En el mismo turno si el jugador no tenia unidades en el campo */
                         /*case 4:
                             if (unidadesEnemigo.Count == 0)
                             {
@@ -191,7 +170,7 @@ namespace Gameplay
                     // Ataque automático a la base del Enemigo si no hay unidades en el campo
                     if (unidadesEnemigo.Count == 0 && unidadesJugador.Count > 0 && turno != 1)
                     {
-                        AtacarBaseEnemiga();
+                        Base.AtacarBaseEnemiga(unidadesEnemigo, oroEnemigo, BaseEnemiga);
                     }
                 }
             }
@@ -205,7 +184,7 @@ namespace Gameplay
             {
                 unidadesJugador.Add(unidad);
                 oroJugador -= unidad.Costo;
-                Console.WriteLine($"Unidad {unidad.Nombre} creada.");
+                Console.WriteLine($"Unidad {unidad.Tipo} creada. Nombre: {unidad.Nombre}.");
             }
             else
             {
@@ -244,77 +223,24 @@ namespace Gameplay
                 unidadesEnemigo.Add(unidadEnemiga);
                 oroEnemigo -= unidadEnemiga.Costo;
                 Console.WriteLine("--------------------");
-                Console.WriteLine($"El enemigo ha creado una unidad {unidadEnemiga.Nombre}.");
+                Console.WriteLine($"El enemigo ha creado una unidad {unidadEnemiga.Tipo}. Llamada: {unidadEnemiga.Nombre}");
             }
             else
             {
-                Console.WriteLine("--------------------");
-                Console.WriteLine("El enemigo no tiene suficiente oro para crear una unidad. Turno salteado");
+                if (opcion != 4)
+                {
+                    Console.WriteLine("--------------------");
+                    Console.WriteLine("El enemigo no tiene suficiente oro para crear una unidad. Turno salteado");
+                }
             }
+
 
             // Ataque automático a la base del jugador si no hay unidades del jugador
             if (unidadesJugador.Count == 0 && unidadesEnemigo.Count > 0 && turno != 1)
             {
-                AtacarBaseJugador();
+                Base.AtacarBaseJugador(unidadesEnemigo, oroJugador, BaseJugador);
             }
         }
-
-
-        //Si el jugador contrario no tiene unidades en el campo de batalla se permite atacar a la base enemiga
-        private void AtacarBaseEnemiga()
-        {
-            if (unidadesJugador.Count > 0)
-            {
-                Unidad unidadAtacante = unidadesJugador[0];
-                BaseEnemiga.BaseAtacada(unidadAtacante);
-                Console.WriteLine("--------------------");
-                Console.WriteLine($"{unidadAtacante.Nombre} (La unidad {unidadAtacante.Tipo} del jugador) ha atacado la base enemiga!");
-                if (BaseEnemiga.Salud <= 0)
-                {
-                    Console.WriteLine("");
-                    Console.WriteLine("La base del enemgio fue destruida!!");
-                }
-                if (unidadAtacante.Ataque <= 0 || unidadAtacante.Defensa <= 0)
-                {
-                    unidadesJugador.RemoveAt(0);
-                    Console.WriteLine("--------------------");
-                    Console.WriteLine($"{unidadAtacante.Nombre} ha sido destruido después del ataque!");
-                    Console.WriteLine("El enemigo gano 5 de oro adicional");
-                    oroEnemigo += 5;
-
-                }
-            }
-            else
-            {
-                Console.WriteLine("--------------------");
-                Console.WriteLine("No hay unidades disponibles para atacar.");
-            }
-        }
-
-        private void AtacarBaseJugador()
-        {
-            if (unidadesEnemigo.Count > 0)
-            {
-                Unidad unidadAtacante = unidadesEnemigo[0];
-                BaseJugador.BaseAtacada(unidadAtacante);
-                Console.WriteLine("--------------------");
-                Console.WriteLine($"{unidadAtacante.Nombre} ha atacado tu base!!");
-                if (unidadAtacante.Ataque <= 0 || unidadAtacante.Defensa <= 0)
-                {
-                    unidadesEnemigo.RemoveAt(0);
-                    Console.WriteLine("--------------------");
-                    Console.WriteLine($"{unidadAtacante.Nombre} ha sido destruido despues del ataque!");
-                    Console.WriteLine("Has ganado 5 de oro adicional!");
-                    oroEnemigo += 5;
-                }
-            }
-            else
-            {
-                Console.WriteLine("--------------------");
-                Console.WriteLine("El enemigo quiso atacar tu base pero no tenia unidades disponibles. Turno salteado");
-            }
-        }
-
 
         //Combate entre las primeras unidades de la lista
         private void Combatir()
@@ -326,7 +252,10 @@ namespace Gameplay
                 Unidad unidadEnemigo = unidadesEnemigo[0];
                 Console.WriteLine("");
                 Console.WriteLine("-----------------------");
-                Console.WriteLine($"Combate entre {unidadJugador.Nombre} (Jugador) y {unidadEnemigo.Nombre} (Enemigo)");
+                Console.WriteLine($"Combate entre:");
+                Console.WriteLine($"{unidadJugador.Nombre} (Unidad tipo {unidadJugador.Tipo} del JUGADOR)");
+                Console.WriteLine($"        VS           ");
+                Console.WriteLine($"{unidadEnemigo.Nombre} (Unidad tipo {unidadEnemigo.Tipo} del ENEMIGO)");
 
                 // Realizar combate
                 unidadEnemigo.Defensa -= unidadJugador.Ataque;
@@ -337,8 +266,8 @@ namespace Gameplay
                 {
                     Console.WriteLine("--------------------");
                     Console.WriteLine($"{unidadJugador.Nombre} (Unidad {unidadJugador.Tipo} del jugador) ha sido derrotado!");
-                    Console.WriteLine("El enemigo gano 5 de oro adicional!");
-                    oroEnemigo += 5;
+                    Console.WriteLine("El enemigo gano 7 de oro adicional!");
+                    oroEnemigo += 7;
                     Console.WriteLine("--------------------");
                     unidadesJugador.RemoveAt(0);
                 }
@@ -347,44 +276,12 @@ namespace Gameplay
                 {
                     Console.WriteLine("--------------------");
                     Console.WriteLine($"{unidadEnemigo.Nombre} (Unidad {unidadEnemigo.Tipo} del enemigo) ha sido derrotado!");
-                    Console.WriteLine("Has ganado 5 de oro adicional!");
-                    oroEnemigo += 5;
+                    Console.WriteLine("Has ganado 7 de oro adicional!");
+                    oroEnemigo += 7;
                     Console.WriteLine("--------------------");
                     unidadesEnemigo.RemoveAt(0);
                 }
             }
         }
-
-
-        //Funcion para mostrar la lista de las unidades
-
-        public void MostrarListaUnidades(List<Unidad> lista)
-        {
-            if (lista.Count == 0)
-            {
-                Console.WriteLine("La lista está vacía.");
-            }
-            else
-            {
-                foreach (Unidad unidad in lista)
-                {
-                    Console.WriteLine(unidad);
-                }
-            }
-        }
-
-
-        public void mostrarStats()
-        {
-            Console.WriteLine("--------------");
-            Console.WriteLine($"Base del jugador: {BaseJugador}");
-            Console.WriteLine("--------------");
-            Console.WriteLine($"Base del enemigo: {BaseEnemiga}");
-            Console.WriteLine("--------------");
-        }
-
-
-
-
     }
 }

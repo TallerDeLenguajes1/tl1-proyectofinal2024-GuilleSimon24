@@ -36,18 +36,17 @@ namespace Unidades
         public static async Task TraerNombreAPI()
         {
             using var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("https://randomuser.me/api/?results=150");
+            var response = await httpClient.GetAsync("https://randomuser.me/api/?results=150");     //Traigo 150 nombres
             response.EnsureSuccessStatusCode();
 
             var responseBody = await response.Content.ReadAsStringAsync();
-            var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(responseBody);
+            var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(responseBody);             //Deserializamos
 
-            foreach (var result in apiResponse.Results)
+            foreach (var result in apiResponse.Results)                                             //Guardamos en una lista
             {
                 nombresDisponibles.Add($"{result.Name.First}");
             }
         }
-
 
         public static string ObtenerNombreAleatorio()
         {
@@ -66,15 +65,14 @@ namespace Unidades
 
         //AQUI TERMINA USO DE API
 
+        //----------------------------------------------------------------------------------------------------------
+
         //COMIENZA CLASE UNIDADES
         private string nombre;
         private int ataque;
         private int defensa;
         private TipoUnidad tipo;
         private int costo;
-
-        
-
         public enum TipoUnidad
         {
             comun,
@@ -87,9 +85,6 @@ namespace Unidades
         public int Defensa { get => defensa; set => defensa = value; }
         public TipoUnidad Tipo { get => tipo; set => tipo = value; }
         public int Costo { get => costo; set => costo = value; }
-
-
-
 
         public Unidad(string nombre, int ataque, int defensa, TipoUnidad tipo, int costo)
         {
@@ -119,35 +114,25 @@ namespace Unidades
             }
         }
 
-
-
         public override string ToString()
         {
             return $"Nombre: {Nombre}, Ataque: {Ataque}, Defensa: {Defensa}, Tipo: {Tipo}";
         }
-
-        //Metodo para crear unidad normal
         public static Unidad CrearUnidadNormal()
         {
             Unidad objeto = new Unidad(ObtenerNombreAleatorio(), 4, 3, TipoUnidad.comun, 10);
             return objeto;
         }
-
-        //Metodo para crear unidad Tanque
         public static Unidad CrearUnidadTanque()
         {
             Unidad objeto = new Unidad(ObtenerNombreAleatorio(), 4, 9, TipoUnidad.tanque, 15);
             return objeto;
         }
-
-        //Metodo para crear unidad Daño
         public static Unidad CrearUnidadDaño()
         {
             Unidad objeto = new Unidad(ObtenerNombreAleatorio(), 8, 4, TipoUnidad.daño, 20);
             return objeto;
         }
-
-
 
         public static List<Unidad> CrearListaUnidades()
         {
@@ -155,8 +140,20 @@ namespace Unidades
 
             return unidades;
         }
-
-
+        //Funcion para crear la unidad jugador y listarla en la lista de unidades del jugador
+        public static void CrearUnidadJugador(Unidad unidad, int oroJugador, List<Unidad> unidadesJugador)
+        {
+            if (oroJugador >= unidad.Costo)
+            {
+                unidadesJugador.Add(unidad);
+                oroJugador -= unidad.Costo;
+                Console.WriteLine($"Unidad {unidad.Tipo} creada. Nombre: {unidad.Nombre}.");
+            }
+            else
+            {
+                Console.WriteLine("Oro insuficiente para crear la unidad.");
+            }
+        }
 
 
 

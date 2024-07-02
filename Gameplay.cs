@@ -7,9 +7,14 @@ namespace Gameplay
     using Complemento;
     using Combate;
     using Pantalla;
+    using System.Data.Common;
 
     class Juego
     {
+        FabricaDeUnidades fabricaDeUnidades;
+        
+        private Jugador jugador;
+         private Jugador enemigo;
         private List<Unidad> unidadesJugador;
         private List<Unidad> unidadesEnemigo;
         private Base BaseJugador;
@@ -20,8 +25,9 @@ namespace Gameplay
 
         public Juego()
         {
-            unidadesJugador = new List<Unidad>();
-            unidadesEnemigo = new List<Unidad>();
+            jugador = new Jugador();
+            enemigo = new Jugador();
+           
             BaseJugador = Base.CrearBase();
             BaseEnemiga = Base.CrearBaseEnemiga();
             oroJugador = 50;
@@ -35,10 +41,10 @@ namespace Gameplay
             Console.WriteLine("Bienvenido al juego!");
             Console.WriteLine("--------------------");
 
-            await Unidad.TraerNombreAPI();  //Cargo en la lista los nombres traidos de la API
+            await IniciarFabricaDeUnidades();
 
-            unidadesJugador = Unidad.CrearListaUnidades();
-            unidadesEnemigo = Unidad.CrearListaUnidades();
+            unidadesJugador = CrearListaUnidades();
+            unidadesEnemigo = CrearListaUnidades();
             // Comenzar el ciclo de turnos
             while (BaseJugador.Salud > 0 || BaseEnemiga.Salud > 0)
             {
@@ -56,6 +62,14 @@ namespace Gameplay
             //Resultado del juego
             Complemento.Resultado(BaseJugador, BaseEnemiga);
 
+        }
+
+        private async Task IniciarFabricaDeUnidades()
+        {
+            
+            APINombres API = new APINombres();
+            List<string> nombresDisponibles = await API.TraerNombreAPI();            
+            fabricaDeUnidades = new FabricaDeUnidades(nombresDisponibles);
         }
 
         private void JugarTurno()
@@ -99,40 +113,43 @@ namespace Gameplay
                 Console.WriteLine("4. Saltar turno");
                 Console.WriteLine("--------------------");
 
-                string opCadena = Console.ReadLine();
-                int opcion;
-                bool anda = int.TryParse(opCadena, out opcion);
-                if (anda)
+                int opcion = 0;
+                bool anda = false;
+                do
                 {
-                    switch (opcion)
-                    {
-                        case 1:
-                            Unidad.CrearUnidadJugador(Unidad.CrearUnidadNormal(), oroJugador, unidadesJugador);
-                            turnoValido = true;
-                            break;
-                        case 2:
-                            Unidad.CrearUnidadJugador(Unidad.CrearUnidadTanque(), oroJugador, unidadesJugador);
-                            turnoValido = true;
-                            break;
-                        case 3:
-                            Unidad.CrearUnidadJugador(Unidad.CrearUnidadDaño(), oroJugador, unidadesJugador);
-                            turnoValido = true;
-                            break;
-                        case 4:
-                            Console.WriteLine("");
-                            Console.WriteLine("Turno saltado.");
-                            turnoValido = true;
-                            break;
-                        default:
-                            Console.WriteLine("Opción inválida. Por favor, elija una opción válida.");
-                            break;
-                    }
-                    // Ataque automático a la base del Enemigo si no hay unidades en el campo
-                    if (unidadesEnemigo.Count == 0 && unidadesJugador.Count > 0 && turno != 1)
-                    {
-                        Base.AtacarBaseEnemiga(unidadesEnemigo, oroEnemigo, BaseEnemiga);
-                    }
+                    string opCadena = Console.ReadLine();    
+                    anda = int.TryParse(opCadena, out opcion);
+                }while(anda == false || (opcion<0 && opcion>4));
+
+                switch (opcion)
+                {
+                    case 1:
+                        Unidad.CrearUnidadJugador(fabricaDeUnidades.CrearUnidadNormal(), oroJugador, unidadesJugador);
+                        turnoValido = true;
+                        break;
+                    case 2:
+                        Unidad.CrearUnidadJugador(fabricaDeUnidades.CrearUnidadTanque(), oroJugador, unidadesJugador);
+                        turnoValido = true;
+                        break;
+                    case 3:
+                        Unidad.CrearUnidadJugador(fabricaDeUnidades.CrearUnidadDaño(), oroJugador, unidadesJugador);
+                        turnoValido = true;
+                        break;
+                    case 4:
+                        Console.WriteLine("");
+                        Console.WriteLine("Turno saltado.");
+                        turnoValido = true;
+                        break;
+                    default:
+                        Console.WriteLine("Opción inválida. Por favor, elija una opción válida.");
+                        break;
                 }
+                // Ataque automático a la base del Enemigo si no hay unidades en el campo
+                if (unidadesEnemigo.Count == 0 && unidadesJugador.Count > 0 && turno != 1)
+                {
+                    Base.AtacarBaseEnemiga(unidadesEnemigo, oroEnemigo, BaseEnemiga);
+                }
+                
             }
         }
         //Turno aleatorio para el enemigo
@@ -146,13 +163,13 @@ namespace Gameplay
             switch (opcion)
             {
                 case 1:
-                    unidadEnemiga = Unidad.CrearUnidadNormal();
+                    unidadEnemiga = fabricaDeUnidades.CrearUnidadNormal();
                     break;
                 case 2:
-                    unidadEnemiga = Unidad.CrearUnidadTanque();
+                    unidadEnemiga = fabricaDeUnidades.CrearUnidadTanque();
                     break;
                 case 3:
-                    unidadEnemiga = Unidad.CrearUnidadDaño();
+                    unidadEnemiga = fabricaDeUnidades.CrearUnidadDaño();
                     break;
                 case 4:
                     Console.WriteLine("El enemigo ha salteado su turno");
@@ -179,6 +196,13 @@ namespace Gameplay
             {
                 Base.AtacarBaseJugador(unidadesEnemigo, oroJugador, BaseJugador);
             }
+        }
+
+        private List<Unidad> CrearListaUnidades()
+        {
+            var unidades = new List<Unidad>();
+
+            return unidades;
         }
     }
 }

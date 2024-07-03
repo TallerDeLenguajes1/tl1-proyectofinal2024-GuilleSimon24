@@ -24,14 +24,15 @@ public static class Complemento
         Console.WriteLine("--------------");
     }
 
-    public static void Resultado(Base BaseJugador, Base BaseEnemiga)
+    public static void Resultado(Jugador jugador, Jugador enemigo)
     {
-        if (BaseJugador.Salud > 0)
+        if (jugador.BaseDeJugador.Salud > 0)
         {
             Console.WriteLine("--------------------");
             Console.WriteLine("El jugador ha ganado!");
+            Gameplay.Juego.GuardarGanador(jugador);
         }
-        else if (BaseEnemiga.Salud > 0)
+        else if (enemigo.BaseDeJugador.Salud > 0)
         {
             Console.WriteLine("--------------------");
             Console.WriteLine("El enemigo ha ganado!");
@@ -43,7 +44,7 @@ public static class Complemento
         }
     }
 
-    public static void PeleaLarga(Base BaseJugador, Base BaseEnemiga)
+    public static void PeleaLarga(Jugador jugador, Jugador enemigo)
     {
         Console.WriteLine("--------------");
         Console.WriteLine("");
@@ -54,16 +55,18 @@ public static class Complemento
 
         //MUESTRO BASES FINALES
         Console.WriteLine("Base del jugador: ");
-        Complemento.mostrarStats(BaseJugador);
+        Complemento.mostrarStats(jugador.BaseDeJugador);
         Console.WriteLine("Base del enemigo: ");
-        Complemento.mostrarStats(BaseEnemiga);
+        Complemento.mostrarStats(enemigo.BaseDeJugador);
 
-        if (BaseJugador.Salud > BaseEnemiga.Salud)
+        if (jugador.BaseDeJugador.Salud > enemigo.BaseDeJugador.Salud)
         {
             Console.WriteLine("--------------------");
             Console.WriteLine("El jugador ha ganado!");
+            Gameplay.Juego.GuardarGanador(jugador);
+
         }
-        else if (BaseEnemiga.Salud > BaseJugador.Salud)
+        else if (enemigo.BaseDeJugador.Salud > jugador.BaseDeJugador.Salud)
         {
             Console.WriteLine("--------------------");
             Console.WriteLine("El enemigo ha ganado!");
@@ -74,6 +77,8 @@ public static class Complemento
             Console.WriteLine("ES UN EMPATE!");
         }
     }
+
+    
 }
 
 

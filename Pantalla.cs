@@ -1,9 +1,7 @@
-namespace Pantalla
+
+
+public static class Pantalla
 {
 
-    public static class Pantalla
-    {
-
-    }
-
 }
+

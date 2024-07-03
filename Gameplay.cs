@@ -2,14 +2,11 @@ namespace Gameplay
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using Pantalla;
 
     class Juego
     {
         FabricaDeUnidades fabricaDeUnidades;
-
         AtaqueBases ataqueBases;
-
         private Jugador jugador;
         private Jugador enemigo;
         private int turno;
@@ -19,34 +16,30 @@ namespace Gameplay
         {
             jugador = new Jugador();
             enemigo = new Jugador();
-
             jugador.BaseDeJugador = new Base();
             enemigo.BaseDeJugador = new Base();
-
             jugador.Oro = 50;
             enemigo.Oro = 50;
-
             ataqueBases = new AtaqueBases();
-
             turno = 1;
-
             combate = new Combate();
         }
 
         public async Task IniciarJuego()
-        {   
-
+        {
             Console.WriteLine("--------------------");
             Console.WriteLine("Bienvenido al juego!");
             Console.WriteLine("--------------------");
 
+            Console.WriteLine("Ingrese un nombre para identificarlo");
+            jugador.Nombre = Console.ReadLine();
             await IniciarFabricaDeUnidades();
             IniciarBases();
-
 
             jugador.Unidades = CrearListaUnidades();
             enemigo.Unidades = CrearListaUnidades();
             jugador.HistorialUnidades = CrearListaUnidades();
+            bool peleaLarga = false;
             // Comenzar el ciclo de turnos
             while (!FinDelJuego(jugador, enemigo))
             {
@@ -56,14 +49,17 @@ namespace Gameplay
 
                 if (turno > 50)     //Por si la pelea se extiende demasiado
                 {
-                    Complemento.PeleaLarga(jugador.BaseDeJugador, enemigo.BaseDeJugador);
+                    Complemento.PeleaLarga(jugador, enemigo);
+                    peleaLarga = true;
                     break;
                 }
             }
-
             //Resultado del juego
-            Complemento.Resultado(jugador.BaseDeJugador, enemigo.BaseDeJugador);
-
+            if (!peleaLarga)
+            {
+                Complemento.Resultado(jugador, enemigo);    
+            }
+            
         }
 
         private void IniciarBases()
@@ -228,8 +224,6 @@ namespace Gameplay
                 Console.WriteLine("Oro insuficiente para crear la unidad.");
             }
         }
-
-
         private bool FinDelJuego(Jugador jugador, Jugador enemigo)
         {
             if (jugador.BaseDeJugador.Salud <= 0 || enemigo.BaseDeJugador.Salud <= 0)
@@ -242,6 +236,24 @@ namespace Gameplay
             }
         }
 
+        public static void GuardarGanador(Jugador jugador)
+        {
+            var resultado = new ResultadoJuego
+            {
+                NombreGanador = jugador.Nombre,
+                FechaYHora = DateTime.UtcNow.AddHours(-3),
+                OroGastado = jugador.OroGastado,
+                BaseGanador = jugador.BaseDeJugador
+            };
+            mandarAJSON(resultado);
+        }
 
+        private static void mandarAJSON(ResultadoJuego resultado)
+        {
+            JSON nuevo = new JSON();
+            string nombreArchivo = "JSON/Ganadores.json";
+
+            nuevo.GenerarJSON(resultado, nombreArchivo);
+        }
     }
 }

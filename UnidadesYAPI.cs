@@ -31,7 +31,7 @@ namespace Unidades
             public List<Result> Results { get; set; }
         }
 
-        public static List<string> nombresDisponibles = new List<string>();
+        private static List<string> nombresDisponibles = new List<string>();
 
         public static async Task TraerNombreAPI()
         {

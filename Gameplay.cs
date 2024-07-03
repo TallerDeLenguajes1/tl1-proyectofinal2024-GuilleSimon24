@@ -1,52 +1,54 @@
 namespace Gameplay
 {
-    using Unidades;
-    using Bases;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using Complemento;
-    using Combate;
     using Pantalla;
-    using System.Data.Common;
 
     class Juego
     {
         FabricaDeUnidades fabricaDeUnidades;
-        
+
+        AtaqueBases ataqueBases;
+
         private Jugador jugador;
-         private Jugador enemigo;
-        private List<Unidad> unidadesJugador;
-        private List<Unidad> unidadesEnemigo;
-        private Base BaseJugador;
-        private Base BaseEnemiga;
-        private int oroJugador;
-        private int oroEnemigo;
+        private Jugador enemigo;
         private int turno;
+        private Combate combate;
 
         public Juego()
         {
             jugador = new Jugador();
             enemigo = new Jugador();
-           
-            BaseJugador = Base.CrearBase();
-            BaseEnemiga = Base.CrearBaseEnemiga();
-            oroJugador = 50;
-            oroEnemigo = 50;
+
+            jugador.BaseDeJugador = new Base();
+            enemigo.BaseDeJugador = new Base();
+
+            jugador.Oro = 50;
+            enemigo.Oro = 50;
+
+            ataqueBases = new AtaqueBases();
+
             turno = 1;
+
+            combate = new Combate();
         }
 
         public async Task IniciarJuego()
-        {
+        {   
+
             Console.WriteLine("--------------------");
             Console.WriteLine("Bienvenido al juego!");
             Console.WriteLine("--------------------");
 
             await IniciarFabricaDeUnidades();
+            IniciarBases();
 
-            unidadesJugador = CrearListaUnidades();
-            unidadesEnemigo = CrearListaUnidades();
+
+            jugador.Unidades = CrearListaUnidades();
+            enemigo.Unidades = CrearListaUnidades();
+            jugador.HistorialUnidades = CrearListaUnidades();
             // Comenzar el ciclo de turnos
-            while (BaseJugador.Salud > 0 || BaseEnemiga.Salud > 0)
+            while (!FinDelJuego(jugador, enemigo))
             {
                 Console.WriteLine($"\n--- Turno {turno} ---");
                 JugarTurno();
@@ -54,21 +56,27 @@ namespace Gameplay
 
                 if (turno > 50)     //Por si la pelea se extiende demasiado
                 {
-                    Complemento.PeleaLarga(BaseJugador, BaseEnemiga);
+                    Complemento.PeleaLarga(jugador.BaseDeJugador, enemigo.BaseDeJugador);
                     break;
                 }
             }
 
             //Resultado del juego
-            Complemento.Resultado(BaseJugador, BaseEnemiga);
+            Complemento.Resultado(jugador.BaseDeJugador, enemigo.BaseDeJugador);
 
+        }
+
+        private void IniciarBases()
+        {
+            jugador.BaseDeJugador.CrearBasePropia();
+            enemigo.BaseDeJugador.CrearBaseEnemiga();
         }
 
         private async Task IniciarFabricaDeUnidades()
         {
-            
+
             APINombres API = new APINombres();
-            List<string> nombresDisponibles = await API.TraerNombreAPI();            
+            List<string> nombresDisponibles = await API.TraerNombreAPI();
             fabricaDeUnidades = new FabricaDeUnidades(nombresDisponibles);
         }
 
@@ -77,27 +85,28 @@ namespace Gameplay
 
             //Muestro base y oro de jugadores antes de pelear
             Console.WriteLine("Base del jugador: ");
-            Complemento.mostrarStats(BaseJugador);
+            Complemento.mostrarStats(jugador.BaseDeJugador);
             Console.WriteLine("Base del enemigo: ");
-            Complemento.mostrarStats(BaseEnemiga);
+            Complemento.mostrarStats(enemigo.BaseDeJugador);
 
 
             //Muestro todos los turnos el oro de ambos
             //CONSULTAR SI SOLO MUESTRO EL MIO. LA IDEA ES QUE HAYA QUE CALCULAR SEGUN LO QUE HAGA EL OTRO
-            Console.WriteLine($"Oro del Jugador: {oroJugador}");
-            Console.WriteLine($"Oro del Enemigo: {oroEnemigo}");
+            Console.WriteLine($"Oro del Jugador: {jugador.Oro}");
+            Console.WriteLine($"Oro del Enemigo: {enemigo.Oro}");
             Console.WriteLine("");
             Console.WriteLine("Unidades del jugador:");
-            Complemento.MostrarListaUnidades(unidadesJugador);
+            Complemento.MostrarListaUnidades(jugador.Unidades);
             Console.WriteLine("Unidades del enemigo: ");
-            Complemento.MostrarListaUnidades(unidadesEnemigo);
+            Complemento.MostrarListaUnidades(enemigo.Unidades);
 
             TurnoJugador();
             TurnoEnemigo();
-            oroJugador += 5;
-            oroEnemigo += 5;
+            jugador.Oro += 5;
+            enemigo.Oro += 5;
             // Realizar combate
-            Combate.Combatir(unidadesJugador, unidadesEnemigo, oroJugador, oroEnemigo);
+
+            combate.Combatir(jugador, enemigo);
         }
 
         private void TurnoJugador()
@@ -117,22 +126,22 @@ namespace Gameplay
                 bool anda = false;
                 do
                 {
-                    string opCadena = Console.ReadLine();    
+                    string opCadena = Console.ReadLine();
                     anda = int.TryParse(opCadena, out opcion);
-                }while(anda == false || (opcion<0 && opcion>4));
+                } while (anda == false || opcion < 0 || opcion > 4);
 
                 switch (opcion)
                 {
                     case 1:
-                        Unidad.CrearUnidadJugador(fabricaDeUnidades.CrearUnidadNormal(), oroJugador, unidadesJugador);
+                        CrearUnidadJugador(fabricaDeUnidades.CrearUnidadNormal(), jugador);
                         turnoValido = true;
                         break;
                     case 2:
-                        Unidad.CrearUnidadJugador(fabricaDeUnidades.CrearUnidadTanque(), oroJugador, unidadesJugador);
+                        CrearUnidadJugador(fabricaDeUnidades.CrearUnidadTanque(), jugador);
                         turnoValido = true;
                         break;
                     case 3:
-                        Unidad.CrearUnidadJugador(fabricaDeUnidades.CrearUnidadDaño(), oroJugador, unidadesJugador);
+                        CrearUnidadJugador(fabricaDeUnidades.CrearUnidadDaño(), jugador);
                         turnoValido = true;
                         break;
                     case 4:
@@ -145,11 +154,11 @@ namespace Gameplay
                         break;
                 }
                 // Ataque automático a la base del Enemigo si no hay unidades en el campo
-                if (unidadesEnemigo.Count == 0 && unidadesJugador.Count > 0 && turno != 1)
+                if (enemigo.Unidades.Count == 0 && jugador.Unidades.Count > 0 && turno != 1)
                 {
-                    Base.AtacarBaseEnemiga(unidadesEnemigo, oroEnemigo, BaseEnemiga);
+                    ataqueBases.AtacarBaseEnemiga(jugador, enemigo);
                 }
-                
+
             }
         }
         //Turno aleatorio para el enemigo
@@ -176,10 +185,10 @@ namespace Gameplay
                     break;
             }
 
-            if (unidadEnemiga != null && oroEnemigo >= unidadEnemiga.Costo)
+            if (unidadEnemiga != null && enemigo.Oro >= unidadEnemiga.Costo)
             {
-                unidadesEnemigo.Add(unidadEnemiga);
-                oroEnemigo -= unidadEnemiga.Costo;
+                enemigo.Unidades.Add(unidadEnemiga);
+                enemigo.Oro -= unidadEnemiga.Costo;
                 Console.WriteLine("--------------------");
                 Console.WriteLine($"El enemigo ha creado una unidad {unidadEnemiga.Tipo}. Llamada: {unidadEnemiga.Nombre}");
             }
@@ -191,11 +200,7 @@ namespace Gameplay
                     Console.WriteLine("El enemigo no tiene suficiente oro para crear una unidad. Turno salteado");
                 }
             }
-            // Ataque automático a la base del jugador si no hay unidades del jugador
-            if (unidadesJugador.Count == 0 && unidadesEnemigo.Count > 0 && turno != 1)
-            {
-                Base.AtacarBaseJugador(unidadesEnemigo, oroJugador, BaseJugador);
-            }
+
         }
 
         private List<Unidad> CrearListaUnidades()
@@ -204,5 +209,39 @@ namespace Gameplay
 
             return unidades;
         }
+        private void CrearUnidadJugador(Unidad unidad, Jugador jugador)
+        {
+            if (jugador.Oro >= unidad.Costo)
+            {
+                jugador.Unidades.Add(unidad);
+                jugador.Oro -= unidad.Costo;
+                Console.WriteLine($"Unidad {unidad.Tipo} creada. Nombre: {unidad.Nombre}.");
+
+                Unidad clon = new Unidad();
+                clon = unidad;
+                jugador.OroGastado += unidad.Costo;
+                jugador.HistorialUnidades.Add(clon);
+
+            }
+            else
+            {
+                Console.WriteLine("Oro insuficiente para crear la unidad.");
+            }
+        }
+
+
+        private bool FinDelJuego(Jugador jugador, Jugador enemigo)
+        {
+            if (jugador.BaseDeJugador.Salud <= 0 || enemigo.BaseDeJugador.Salud <= 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
     }
 }

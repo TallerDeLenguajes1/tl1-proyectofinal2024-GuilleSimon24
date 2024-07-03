@@ -1,13 +1,10 @@
-namespace Unidades
-{
-    using Newtonsoft.Json;
+using Newtonsoft.Json;
 
-    public class Name
+public class Name
 {
     [JsonProperty("first")]
     public string First { get; set; }
 
     [JsonProperty("last")]
     public string Last { get; set; }
-}
 }

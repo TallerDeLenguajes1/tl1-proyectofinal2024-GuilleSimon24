@@ -26,26 +26,27 @@ public static class Complemento
 
     public static void Resultado(Jugador jugador, Jugador enemigo)
     {
+        Pantalla UI = new Pantalla();
         if (jugador.BaseDeJugador.Salud > 0)
         {
-            Console.WriteLine("--------------------");
-            Console.WriteLine("El jugador ha ganado!");
+            UI.GanoElJugador();
             Gameplay.Juego.GuardarGanador(jugador);
         }
         else if (enemigo.BaseDeJugador.Salud > 0)
         {
-            Console.WriteLine("--------------------");
-            Console.WriteLine("El enemigo ha ganado!");
+            Console.ForegroundColor = ConsoleColor.Red;
+            UI.GanoElEnemigo();
+            Console.ResetColor();
         }
         else
-        {   //Esto viene de una version anterior del programa, preguntar si es necesario
-            Console.WriteLine("--------------------");
-            Console.WriteLine("Ambos han sido derrotados, es un empate!");
+        {   
+            UI.Empate();
         }
     }
 
     public static void PeleaLarga(Jugador jugador, Jugador enemigo)
     {
+        Pantalla UI = new Pantalla();
         Console.WriteLine("--------------");
         Console.WriteLine("");
         Console.WriteLine("El combate se extendió demasiado");
@@ -54,27 +55,30 @@ public static class Complemento
         Console.WriteLine("");
 
         //MUESTRO BASES FINALES
+        Console.ForegroundColor = ConsoleColor.Magenta;
         Console.WriteLine("Base del jugador: ");
         Complemento.mostrarStats(jugador.BaseDeJugador);
+        Console.ForegroundColor = ConsoleColor.Red;
         Console.WriteLine("Base del enemigo: ");
         Complemento.mostrarStats(enemigo.BaseDeJugador);
+        Console.ResetColor();
 
         if (jugador.BaseDeJugador.Salud > enemigo.BaseDeJugador.Salud)
         {
-            Console.WriteLine("--------------------");
-            Console.WriteLine("El jugador ha ganado!");
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            UI.GanoElJugador();
             Gameplay.Juego.GuardarGanador(jugador);
-
+            Console.ResetColor();
         }
         else if (enemigo.BaseDeJugador.Salud > jugador.BaseDeJugador.Salud)
         {
-            Console.WriteLine("--------------------");
-            Console.WriteLine("El enemigo ha ganado!");
+            Console.ForegroundColor = ConsoleColor.Red;
+            UI.GanoElEnemigo();
+            Console.ResetColor();
         }
         else
         {
-            Console.WriteLine("--------------------");
-            Console.WriteLine("ES UN EMPATE!");
+            UI.Empate();
         }
     }
 

@@ -26,6 +26,32 @@ class JSON
         }
     }
 
+    public void TraerDeJsonYMostrar(string nombreArchivo)
+    {
+        try
+        {
+            if (!File.Exists(nombreArchivo))
+            {
+                Console.WriteLine("No existen ganadores todavía");
+            }
+
+            string jsonString = File.ReadAllText(nombreArchivo);
+            List<ResultadoJuego> traidoDeJson = JsonSerializer.Deserialize<List<ResultadoJuego>>(jsonString);
+            foreach (ResultadoJuego unidad in traidoDeJson)
+            {
+                Console.WriteLine("- - - - - - - - - - - - - ");
+                Console.WriteLine($"Nombre: {unidad.NombreGanador}");
+                Complemento.mostrarStats(unidad.BaseGanador);
+                Console.WriteLine($"Oro gastado: {unidad.OroGastado}");
+                Console.WriteLine($"Fecha y hora de la hazaña: {unidad.FechaYHora}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al traer los datos del archivo JSON: {ex.Message}");
+        }
+    }
+
     public void GenerarJSON(ResultadoJuego resultado, string nombreArchivo)
     {
         var opciones = new JsonSerializerOptions

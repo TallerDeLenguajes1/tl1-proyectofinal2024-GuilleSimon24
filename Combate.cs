@@ -17,6 +17,7 @@ public class Combate
             Console.WriteLine($"{unidadJugador.Nombre} (Unidad tipo {unidadJugador.Tipo} del JUGADOR)");
             Console.WriteLine($"        VS           ");
             Console.WriteLine($"{unidadEnemigo.Nombre} (Unidad tipo {unidadEnemigo.Tipo} del ENEMIGO)");
+            Console.WriteLine("-----------------------");
 
             // Realizar combate
             unidadEnemigo.Defensa -= unidadJugador.Ataque;
@@ -27,7 +28,9 @@ public class Combate
             {
                 Console.WriteLine("--------------------");
                 Console.WriteLine($"{unidadJugador.Nombre} (Unidad {unidadJugador.Tipo} del jugador) ha sido derrotado!");
+                Console.ForegroundColor= ConsoleColor.Yellow;
                 Console.WriteLine("El enemigo gano 7 de oro adicional!");
+                Console.ResetColor();
                 enemigo.Oro += 7;
                 Console.WriteLine("--------------------");
                 jugador.Unidades.RemoveAt(0);
@@ -37,7 +40,9 @@ public class Combate
             {
                 Console.WriteLine("--------------------");
                 Console.WriteLine($"{unidadEnemigo.Nombre} (Unidad {unidadEnemigo.Tipo} del enemigo) ha sido derrotado!");
+                Console.ForegroundColor= ConsoleColor.Yellow;
                 Console.WriteLine("Has ganado 7 de oro adicional!");
+                Console.ResetColor();
                 jugador.Oro += 7;
                 Console.WriteLine("--------------------");
                 enemigo.Unidades.RemoveAt(0);

@@ -35,7 +35,7 @@ public class Base
 
     public void CrearBasePropia()
     {
-        
+        Console.ForegroundColor = ConsoleColor.Cyan;
         Console.WriteLine("Ingrese un nombre para su base: ");
         string nombre = Console.ReadLine();
         this.nombre = nombre;

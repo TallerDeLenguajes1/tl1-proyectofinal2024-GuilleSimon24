@@ -1,0 +1,13 @@
+[
+  {
+    "FechaYHora": "2024-07-03T23:13:51.4788865Z",
+    "NombreGanador": "guillote",
+    "BaseGanador": {
+      "Nombre": "asdasd",
+      "Salud": 50,
+      "Defensa": 2,
+      "Ataque": 5
+    },
+    "OroGastado": 165
+  }
+]

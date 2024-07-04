@@ -1,4 +1,6 @@
 ﻿using Gameplay;
+Pantalla UI = new Pantalla();
+UI.MensajeDeBienvenida();
 
-Juego iniciar = new Juego();
-await iniciar.IniciarJuego();
+Menu inicio = new Menu();
+await inicio.InciarAPP();

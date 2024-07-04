@@ -31,9 +31,7 @@ class Menu
                     break;
                 case 2:
                     JSON ganadores = new JSON();
-
                     var Lista = new List<ResultadoJuego>();
-
 
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("Ganadores Historicos");
@@ -49,13 +47,8 @@ class Menu
                     Console.WriteLine("Opción inválida. Por favor, intente de nuevo.");
                     Console.ResetColor();
                     break;
-
             }
-
-
         } while (valido == false || opcion < 0 || opcion > 3);
-
-
     }
     public async Task InciarAPP()
     {

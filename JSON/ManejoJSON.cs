@@ -34,7 +34,7 @@ class JSON
             {
                 Console.WriteLine("No existen ganadores todavía");
             }
-
+            
             string jsonString = File.ReadAllText(nombreArchivo);
             List<ResultadoJuego> traidoDeJson = JsonSerializer.Deserialize<List<ResultadoJuego>>(jsonString);
             foreach (ResultadoJuego unidad in traidoDeJson)

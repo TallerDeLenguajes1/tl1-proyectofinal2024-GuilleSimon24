@@ -37,12 +37,9 @@ namespace Gameplay
             IniciarBases();
             Console.ResetColor();
 
-
             jugador.Unidades = CrearListaUnidades();
-
             enemigo.Unidades = CrearListaUnidades();
 
-            jugador.HistorialUnidades = CrearListaUnidades();
             bool peleaLarga = false;
             // Comenzar el ciclo de turnos
             while (!FinDelJuego(jugador, enemigo))
@@ -84,7 +81,6 @@ namespace Gameplay
 
         private void JugarTurno()
         {
-
             //Muestro base y oro de jugadores antes de pelear
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.WriteLine("Base del jugador: ");
@@ -94,9 +90,7 @@ namespace Gameplay
             Complemento.mostrarStats(enemigo.BaseDeJugador);
             Console.ResetColor();
 
-
             //Muestro todos los turnos el oro de ambos
-            //CONSULTAR SI SOLO MUESTRO EL MIO. LA IDEA ES QUE HAYA QUE CALCULAR SEGUN LO QUE HAGA EL OTRO
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine($"Oro del Jugador: {jugador.Oro}");
             Console.WriteLine($"Oro del Enemigo: {enemigo.Oro}");
@@ -117,6 +111,7 @@ namespace Gameplay
             TurnoEnemigo();
             jugador.Oro += 5;
             enemigo.Oro += 5;
+            
             // Realizar combate
             Console.ForegroundColor = ConsoleColor.Green;
             combate.Combatir(jugador, enemigo);
@@ -136,7 +131,6 @@ namespace Gameplay
                 Console.WriteLine("3. Crear unidad de daño (20 de oro)");
                 Console.WriteLine("4. Saltar turno");
                 Console.WriteLine("--------------------");
-
 
                 int opcion = 0;
                 bool anda = false;
@@ -169,7 +163,6 @@ namespace Gameplay
                             break;
                     }
                 } while (anda == false || opcion < 0 || opcion > 4);
-
 
                 // Ataque automático a la base del Enemigo si no hay unidades en el campo
                 if (enemigo.Unidades.Count == 0 && jugador.Unidades.Count > 0 && turno != 1)
@@ -246,13 +239,6 @@ namespace Gameplay
                 Console.WriteLine("----------------------");
                 Console.WriteLine($"Unidad {unidad.Tipo} creada. Nombre: {unidad.Nombre}.");
                 Console.WriteLine("----------------------");
-
-
-                Unidad clon = new Unidad();
-                clon = unidad;
-                jugador.OroGastado += unidad.Costo;
-                jugador.HistorialUnidades.Add(clon);
-
             }
             else
             {

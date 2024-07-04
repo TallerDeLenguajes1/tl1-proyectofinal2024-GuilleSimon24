@@ -48,7 +48,6 @@ class AtaqueBases
                 Console.WriteLine($"{unidadAtacante.Nombre} ha sido destruido después del ataque!");
                 Console.WriteLine("El enemigo gano 5 de oro adicional");
                 enemigo.Oro += 5;
-
             }
         }
         else

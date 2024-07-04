@@ -28,7 +28,6 @@ class FabricaDeUnidades
         {
             throw new InvalidOperationException("No hay nombres disponibles.");
         }
-
         var random = new Random();
         int index = random.Next(nombresDisponibles.Count);  //Para sacar por indice
         var nombre = nombresDisponibles[index];

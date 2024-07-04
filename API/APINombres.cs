@@ -50,8 +50,5 @@ class APINombres
             Console.WriteLine($"No se pudo conectar con la API. Usando una lista de nombres por defecto. Detalles del error: {e.Message}");
             return nombresPorDefecto;
         }
-
     }
-
-
 }

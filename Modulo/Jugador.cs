@@ -5,7 +5,6 @@ public class Jugador
     List<Unidad> unidades;
     int oroGastado;
 
-    List<Unidad> historialUnidades;
     string nombre;
 
     public Jugador()
@@ -16,6 +15,5 @@ public class Jugador
     public List<Unidad> Unidades { get => unidades; set => unidades = value; }
     public int Oro { get => oro; set => oro = value; }
     public int OroGastado { get => oroGastado; set => oroGastado = value; }
-    public List<Unidad> HistorialUnidades { get => historialUnidades; set => historialUnidades = value; }
     public string Nombre { get => nombre; set => nombre = value; }
 }

@@ -13,7 +13,6 @@ public class Unidad
     private TipoUnidad tipo;
     private int costo;
 
-
     public string Nombre { get => nombre; set => nombre = value; }
     public int Ataque { get => ataque; set => ataque = value; }
     public int Defensa { get => defensa; set => defensa = value; }

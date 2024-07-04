@@ -1,5 +1,4 @@
-﻿using Gameplay;
-Pantalla UI = new Pantalla();
+﻿Pantalla UI = new Pantalla();
 UI.MensajeDeBienvenida();
 
 Menu inicio = new Menu();

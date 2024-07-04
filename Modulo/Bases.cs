@@ -25,7 +25,6 @@ public class Base
         return $"Nombre: {Nombre}, Salud: {Salud}, Defensa: {Defensa}, Ataque: {Ataque}";
     }
 
-
     public void BaseAtacada(Unidad unidadAtacante)
     {
         int daño = unidadAtacante.Ataque - defensa;

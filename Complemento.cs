@@ -39,7 +39,7 @@ public static class Complemento
             Console.ResetColor();
         }
         else
-        {   
+        {
             UI.Empate();
         }
     }
@@ -82,7 +82,7 @@ public static class Complemento
         }
     }
 
-    
+
 }
 
 

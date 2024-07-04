@@ -17,57 +17,49 @@ class Menu
         Console.WriteLine("2. Ver Lista de Ganadores");
         Console.WriteLine("3. Salir");
         Console.ResetColor();
-        int opcion = OpcionValida();
-
-        switch (opcion)
-        {
-            case 1:
-                Juego iniciar = new Juego();
-                await iniciar.IniciarJuego();
-                break;
-            case 2:
-                JSON ganadores = new JSON();
-
-                var Lista = new List<ResultadoJuego>();
-
-
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("Ganadores Historicos");
-                Console.ResetColor();
-                ganadores.TraerDeJsonYMostrar("JSON/Ganadores.json");
-                await MostrarMenu();
-                break;
-            case 3:
-                Console.WriteLine("- - - - Hasta pronto - - - -");
-                break;
-
-        }
-    }
-    public async Task InciarAPP()
-    {
-        await MostrarMenu();
-    }
-    private int OpcionValida()
-    {
         bool valido = false;
         int opcion;
         do
         {
             string opCadena = Console.ReadLine();
             bool anda = int.TryParse(opCadena, out opcion);
-            if (anda)
+            switch (opcion)
             {
-                valido = true;
-            }
-            else
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Opción inválida. Por favor, intente de nuevo.");
-                Console.ResetColor();
+                case 1:
+                    Juego iniciar = new Juego();
+                    await iniciar.IniciarJuego();
+                    break;
+                case 2:
+                    JSON ganadores = new JSON();
+
+                    var Lista = new List<ResultadoJuego>();
+
+
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("Ganadores Historicos");
+                    Console.ResetColor();
+                    ganadores.TraerDeJsonYMostrar("JSON/Ganadores.json");
+                    await MostrarMenu();
+                    break;
+                case 3:
+                    Console.WriteLine("- - - - Hasta pronto - - - -");
+                    break;
+                default:
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Opción inválida. Por favor, intente de nuevo.");
+                    Console.ResetColor();
+                    break;
+
             }
 
-        } while (!valido);
 
-        return opcion;
+        } while (valido == false || opcion < 0 || opcion > 3);
+
+
     }
+    public async Task InciarAPP()
+    {
+        await MostrarMenu();
+    }
+    
 }

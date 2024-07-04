@@ -9,5 +9,27 @@
       "Ataque": 5
     },
     "OroGastado": 165
+  },
+  {
+    "FechaYHora": "2024-07-03T23:38:23.6946597Z",
+    "NombreGanador": "pablo",
+    "BaseGanador": {
+      "Nombre": "casa",
+      "Salud": 50,
+      "Defensa": 2,
+      "Ataque": 5
+    },
+    "OroGastado": 15
+  },
+  {
+    "FechaYHora": "2024-07-04T01:27:11.4039438Z",
+    "NombreGanador": "gere",
+    "BaseGanador": {
+      "Nombre": "usa",
+      "Salud": 50,
+      "Defensa": 2,
+      "Ataque": 5
+    },
+    "OroGastado": 30
   }
 ]

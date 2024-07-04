@@ -14,7 +14,7 @@ public class Base
 
     public Base(string nombre, int salud, int defensa, int ataque)
     {
-        this.nombre = nombre;
+        this.Nombre = nombre;
         this.salud = salud;
         this.defensa = defensa;
         this.ataque = ataque;
@@ -38,7 +38,7 @@ public class Base
         Console.ForegroundColor = ConsoleColor.Cyan;
         Console.WriteLine("Ingrese un nombre para su base: ");
         string nombre = Console.ReadLine();
-        this.nombre = nombre;
+        this.Nombre = nombre;
         salud = 50;
         ataque = 5;
         defensa = 2;
@@ -46,7 +46,7 @@ public class Base
 
     public void CrearBaseEnemiga()
     {
-        nombre = "Base enemiga";
+        Nombre = "Base enemiga";
         salud = 50;
         ataque = 5;
         defensa = 2;

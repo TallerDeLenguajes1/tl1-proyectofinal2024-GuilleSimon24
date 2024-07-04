@@ -136,7 +136,7 @@ namespace Gameplay
                 Console.WriteLine("3. Crear unidad de daño (20 de oro)");
                 Console.WriteLine("4. Saltar turno");
                 Console.WriteLine("--------------------");
-                
+
 
                 int opcion = 0;
                 bool anda = false;
@@ -211,7 +211,6 @@ namespace Gameplay
 
                 Console.WriteLine("--------------------");
                 Console.WriteLine($"El enemigo ha creado una unidad {unidadEnemiga.Tipo}. Llamada: {unidadEnemiga.Nombre}");
-
             }
             else
             {
@@ -222,11 +221,11 @@ namespace Gameplay
                     Console.WriteLine("----------------------");
                 }
             }
-            /*
+        
             if (jugador.Unidades.Count == 0 && enemigo.Unidades.Count > 0 && turno != 1)
-                {
-                    ataqueBases.AtacarBaseJugador(jugador, enemigo);
-                }*/
+            {
+                ataqueBases.AtacarBaseJugador(jugador, enemigo);
+            }
             Console.ResetColor();
         }
 
